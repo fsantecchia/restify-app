@@ -1,0 +1,11 @@
+{
+  "excludeFiles": [
+    "**/README.md",
+    ".coverage",
+    ".gitignore",
+    "node_modules/**",
+    "**/*.json"
+  ],
+  "preset": "crockford",
+  "requireMultipleVarDecl": false
+}

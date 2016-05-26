@@ -1,0 +1,24 @@
+{
+  "name": "FabraJS",
+  "version": "0.2.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "lint": "npm run jscs && npm run eslint",
+    "jscs": "./node_modules/.bin/jscs ** --reporter=console",
+    "eslint": "./node_modules/.bin/eslint api server.js"
+  },
+  "author": "Fabricio Santecchia",
+  "license": "ISC",
+  "dependencies": {
+    "mongoose": "^4.4.10",
+    "restify": "^4.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^2.10.2",
+    "jscs": "^3.0.3",
+    "lodash": "^4.11.1",
+    "require-all": "^2.0.0"
+  }
+}
