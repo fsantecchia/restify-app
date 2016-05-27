@@ -29,9 +29,12 @@ $ npm run lint
 Add a new file inside the 'models' folder and export a json with the necessary props:
 
 `mongooseModelName` (required): this will be use to create the REST routes.
+
 `schema` (required): mongoose schema props must be here.
-`statics`: here you add custom functions which will be called in custom urls that you have to add at the end of route.js
-`populate`: array with props to be populated in the find()
+
+`statics`: here you add custom functions which will be called in custom urls that you have to add at the end of route.js.
+
+`populate`: array with props to be populated in the find().
 
 
 The router.js file handles the REST request automatically when the model file is created.
