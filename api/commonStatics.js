@@ -1,13 +1,23 @@
 'use strict';
 
+const _ = require('lodash');
 const mongoose = require('mongoose');
+
+const getParsedQueryString = function (params) {
+    let queryString = _.clone(params);
+
+    //remove de url param in order to obtein the qs
+    delete queryString.model;
+
+    return queryString;
+};
 
 module.exports = {
     create: function (request, response) {
         let model = request.params.model;
         let mongooseModel = mongoose.model(model);
         let props = request.body;
-        console.log(props)
+
         mongooseModel.create(props).then(function (data) {
             response.send(data);
         }).catch(function (data) {
@@ -24,11 +34,17 @@ module.exports = {
             response.send(data);
         });
     },
-    findAll: function (request, response) {
+    find: function (request, response) {
         let model = request.params.model;
         let mongooseModel = mongoose.model(model);
+        let query = getParsedQueryString(request.params);
+        let promise = mongooseModel.find(query);
 
-        mongooseModel.find().then(function (data) {
+        if (mongooseModel.fieldsToPopulate) {
+            promise.populate(mongooseModel.fieldsToPopulate);
+        }
+
+        promise.then(function (data) {
             response.send(data);
         });
     },
@@ -36,8 +52,13 @@ module.exports = {
         let id = request.params.id;
         let model = request.params.model;
         let mongooseModel = mongoose.model(model);
+        let promise = mongooseModel.find(id);
 
-        mongooseModel.findById(id).then(function (data) {
+        if (mongooseModel.fieldsToPopulate) {
+            promise.populate(mongooseModel.fieldsToPopulate);
+        }
+
+        promise.then(function (data) {
             response.send(data);
         });
     },

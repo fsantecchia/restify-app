@@ -4,7 +4,8 @@
     ".coverage",
     ".gitignore",
     "node_modules/**",
-    "**/*.json"
+    "**/*.json",
+    "npm-debug.log"
   ],
   "preset": "crockford",
   "requireMultipleVarDecl": false

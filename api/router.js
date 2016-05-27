@@ -1,37 +1,29 @@
 'use strict';
 
-const _ = require('lodash');
 const mongoose = require('mongoose');
 const requireAll = require('require-all');
-const restify = require('restify');
 
 const commonStatics = require('./commonStatics');
-const config = require('./../config');
 
 const applyRoutes = function (server) {
-    // route middleware that will happen on every request
-    server.use(function (request, response, next) {
-        console.log(request.method, request.url);
+    //Generate REST endopints
 
-        next();
-    });
-
-    //Generate REST routes
-    
     //Create Mongoose model for each file in /models folder
-    const controllers = requireAll({
+    requireAll({
         dirname: __dirname + '/models',
         resolve: function (basicModel) {
-            //Add rest statics to the schema
-            let mongooseSchema = mongoose.Schema(basicModel.schema)
-            
+            //Add statics to the schema
+            let mongooseSchema = mongoose.Schema(basicModel.schema);
+
+            mongooseSchema.statics.custom = basicModel.statics;
             mongooseSchema.statics.rest = commonStatics;
-            
+            mongooseSchema.statics.fieldsToPopulate = basicModel.populate;
+
             //Create Mongoose model
             mongoose.model(basicModel.mongooseModelName,  mongooseSchema);
         }
     });
-    
+
     const restHandler = function (staticMethod) {
         return function (request, response) {
             let model = request.params.model;
@@ -39,19 +31,20 @@ const applyRoutes = function (server) {
 
             //Call the function of the proper model
             mongooseModel.rest[staticMethod](request, response);
-        }
+        };
     };
 
-    server.get('/rest/:model', restHandler('findAll'));
-    server.get('/rest/:model/:id', restHandler('findById'));
-    server.post('/rest/:model', restHandler('create'));
-    server.put('/rest/:model', restHandler('modificate'));
-    server.del('/rest/:model/:id', restHandler('delete'));
-    
-    //Generate REST routes *end*
+    server.get('/api/:model', restHandler('find'));
+    server.get('/api/:model/:id', restHandler('findById'));
+    server.post('/api/:model', restHandler('create'));
+    server.put('/api/:model', restHandler('modificate'));
+    server.del('/api/:model/:id', restHandler('delete'));
+    //Generate REST endopints *end*
 
-    }
+    //Custom endpoints
+    server.put('/api/InspectionOrder/close', mongoose.model('InspectionOrder').custom.close);
+};
 
 module.exports = {
     applyRoutes: applyRoutes
-}
+};
