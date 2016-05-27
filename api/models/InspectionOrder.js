@@ -17,16 +17,14 @@ const closeInspection = function (request, response) {
 module.exports = {
     mongooseModelName: mongooseModelName,
     schema: {
-        id: { type: 'number', required: false },
         note: 'string',
-        orderNumber: { type: 'string', required: false },
-        inspectionType: { type: 'objectId', ref: 'InspectionType', required: false },
+        inspectionType: { type: 'objectId', ref: 'InspectionType', required: true },
         vehicle: {
-            make: { type: 'string', required: false },
-            model: { type: 'string', required: false },
-            year: { type: 'number', required: false }
+            make: { type: 'string', required: true },
+            model: { type: 'string', required: true },
+            year: { type: 'number', required: true }
         },
-        closed: {type: 'boolean', default: false}
+        closed: { type: 'boolean', default: false }
     },
     statics: {
         close: closeInspection

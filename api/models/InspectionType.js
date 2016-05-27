@@ -1,7 +1,7 @@
 module.exports = {
     mongooseModelName: 'InspectionType',
     schema: {
-        name: 'string'
+        name: { type: 'string', required: true }
     }
 };
 
